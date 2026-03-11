@@ -22,34 +22,29 @@ const StatusBar = () => {
   });
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4">
-      {/* Left - Brand */}
-      <div className="flex items-center gap-3">
-        <h1 className="font-display text-sm font-semibold tracking-[0.15em] text-foreground">
-          GALAPAG<span className="text-bioluminescent">OS</span>
-        </h1>
-        <span className="font-body text-[10px] text-sand tracking-widest">
-          AMAZON<span className="text-bioluminescent">IA</span>
-        </span>
-      </div>
-
-      {/* Center - Location */}
-      <div className="hidden md:flex items-center gap-2">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 pointer-events-none">
+      {/* Left - Location */}
+      <div className="hidden md:flex flex-1 items-center gap-2 pointer-events-auto ml-16">
         <span className="w-1.5 h-1.5 rounded-full bg-bioluminescent animate-pulse-glow" />
         <span className="font-body text-[10px] text-sand tracking-[0.15em]">
           SAN CRISTÓBAL · GALÁPAGOS · ECUADOR
         </span>
       </div>
 
-      {/* Right - System */}
-      <div className="flex items-center gap-4">
-        <span className="font-body text-xs text-sand">{date}</span>
+      {/* Center - Brand */}
+      <div className="flex flex-1 justify-center items-center gap-3 pointer-events-auto">
+        <h1 className="font-display text-sm font-semibold tracking-[0.15em] text-foreground">
+          GALAPAG<span className="text-bioluminescent">OS</span>
+        </h1>
+        <span className="font-body text-[10px] text-sand tracking-widest leading-none translate-y-px">
+          AMAZON<span className="text-bioluminescent">IA</span>
+        </span>
+      </div>
+
+      {/* Right - System (Time only) */}
+      <div className="flex flex-1 justify-end items-center gap-4 pointer-events-auto">
+        <span className="font-body text-xs text-sand hidden sm:inline-block">{date}</span>
         <span className="font-display text-sm text-foreground">{formatted}</span>
-        <div className="flex items-center gap-2 text-sand">
-          <Signal className="w-3 h-3" />
-          <Wifi className="w-3 h-3" />
-          <Battery className="w-3 h-3" />
-        </div>
       </div>
     </header>
   );

@@ -6,82 +6,91 @@
 
 @layer base {
   :root {
-    /* GalapagOs — Volcanic Dark Theme */
-    --background: 220 10% 7%;          /* Negro Volcánico #111214 */
-    --foreground: 216 14% 95%;         /* Blanco Tiza #F0F2F5 */
+    /* GalapagOs — Watercolor Theme (High Contrast) */
+    --background: 40 30% 90%;
+    /* Arena / Pergamon claro */
+    --foreground: 220 30% 10%;
+    /* Casi negro / Azul-Gris muy oscuro para máximo contraste */
 
-    --card: 220 10% 10%;
-    --card-foreground: 216 14% 95%;
+    --card: 40 30% 95%;
+    --card-foreground: 220 30% 10%;
 
-    --popover: 220 10% 10%;
-    --popover-foreground: 216 14% 95%;
+    --popover: 40 30% 95%;
+    --popover-foreground: 220 30% 10%;
 
-    --primary: 165 100% 47%;           /* Turquesa Bioluminiscente #00F0C8 */
-    --primary-foreground: 220 10% 7%;
+    --primary: 205 60% 40%;
+    /* Azul fuerte vibrante (graficas/botones) */
+    --primary-foreground: 0 0% 100%;
+    /* Texto blanco sobre primary */
 
-    --secondary: 30 8% 55%;            /* Arena Húmeda #9D9386 */
-    --secondary-foreground: 216 14% 95%;
+    --secondary: 40 20% 75%;
+    --secondary-foreground: 220 30% 10%;
 
-    --muted: 220 10% 14%;
-    --muted-foreground: 30 8% 55%;
+    --muted: 40 20% 85%;
+    --muted-foreground: 220 20% 30%;
+    /* Texto oscurecido para subtitulos */
 
-    --accent: 165 100% 47%;
-    --accent-foreground: 220 10% 7%;
+    --accent: 205 60% 40%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 216 14% 95%;
 
-    --border: 220 10% 18%;
-    --input: 220 10% 18%;
-    --ring: 165 100% 47%;
+    --border: 40 30% 60%;
+    /* Bordes mas marcados */
+    --input: 40 30% 60%;
+    --ring: 205 60% 40%;
 
     --radius: 0rem;
 
     /* Custom tokens */
-    --volcanic: 220 10% 7%;
-    --chalk: 216 14% 95%;
-    --bioluminescent: 165 100% 47%;
-    --sand: 30 8% 55%;
-    --deep-ocean: 220 15% 4%;
+    --volcanic: 220 30% 10%;
+    /* Texto oscuro solido */
+    --chalk: 40 30% 95%;
+    --bioluminescent: 205 80% 35%;
+    /* Punto luminoso mas oscuro e intenso */
+    --sand: 30 20% 30%;
+    /* Textos grisaceos / arena mojada oscura */
+    --deep-ocean: 230 40% 15%;
 
-    --sidebar-background: 220 10% 5%;
-    --sidebar-foreground: 216 14% 95%;
-    --sidebar-primary: 165 100% 47%;
-    --sidebar-primary-foreground: 220 10% 7%;
-    --sidebar-accent: 220 10% 12%;
-    --sidebar-accent-foreground: 216 14% 95%;
-    --sidebar-border: 220 10% 15%;
-    --sidebar-ring: 165 100% 47%;
+    --sidebar-background: 40 30% 85%;
+    --sidebar-foreground: 220 30% 10%;
+    --sidebar-primary: 205 60% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 30% 80%;
+    --sidebar-accent-foreground: 220 30% 10%;
+    --sidebar-border: 40 30% 60%;
+    --sidebar-ring: 205 60% 40%;
   }
 
   .dark {
-    --background: 220 10% 7%;
-    --foreground: 216 14% 95%;
-    --card: 220 10% 10%;
-    --card-foreground: 216 14% 95%;
-    --popover: 220 10% 10%;
-    --popover-foreground: 216 14% 95%;
-    --primary: 165 100% 47%;
-    --primary-foreground: 220 10% 7%;
-    --secondary: 30 8% 55%;
-    --secondary-foreground: 216 14% 95%;
-    --muted: 220 10% 14%;
-    --muted-foreground: 30 8% 55%;
-    --accent: 165 100% 47%;
-    --accent-foreground: 220 10% 7%;
+    --background: 40 30% 90%;
+    --foreground: 220 30% 10%;
+    --card: 40 30% 95%;
+    --card-foreground: 220 30% 10%;
+    --popover: 40 30% 95%;
+    --popover-foreground: 220 30% 10%;
+    --primary: 205 60% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 75%;
+    --secondary-foreground: 220 30% 10%;
+    --muted: 40 20% 85%;
+    --muted-foreground: 220 20% 30%;
+    --accent: 205 60% 40%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 216 14% 95%;
-    --border: 220 10% 18%;
-    --input: 220 10% 18%;
-    --ring: 165 100% 47%;
-    --sidebar-background: 220 10% 5%;
-    --sidebar-foreground: 216 14% 95%;
-    --sidebar-primary: 165 100% 47%;
-    --sidebar-primary-foreground: 220 10% 7%;
-    --sidebar-accent: 220 10% 12%;
-    --sidebar-accent-foreground: 216 14% 95%;
-    --sidebar-border: 220 10% 15%;
-    --sidebar-ring: 165 100% 47%;
+    --border: 40 20% 75%;
+    --input: 40 20% 75%;
+    --ring: 200 40% 70%;
+    --sidebar-background: 40 30% 85%;
+    --sidebar-foreground: 30 15% 20%;
+    --sidebar-primary: 200 40% 70%;
+    --sidebar-primary-foreground: 30 15% 20%;
+    --sidebar-accent: 40 30% 90%;
+    --sidebar-accent-foreground: 30 15% 20%;
+    --sidebar-border: 40 20% 75%;
+    --sidebar-ring: 200 40% 70%;
   }
 }
 
@@ -90,12 +99,22 @@
     @apply border-border;
   }
 
+  html {
+    font-size: 20px !important;
+    /* Increase base font size to scale rem units globally */
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Roboto Flex', sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -134,11 +153,11 @@
   }
 
   .glow-bioluminescent {
-    text-shadow: 0 0 20px hsl(165 100% 47% / 0.5), 0 0 40px hsl(165 100% 47% / 0.2);
+    text-shadow: 0 0 20px hsl(200 40% 70% / 0.5), 0 0 40px hsl(200 40% 70% / 0.2);
   }
 
   .shadow-bioluminescent {
-    box-shadow: 0 0 20px hsl(165 100% 47% / 0.15), 0 0 60px hsl(165 100% 47% / 0.05);
+    box-shadow: 0 0 20px hsl(200 40% 70% / 0.3), 0 0 60px hsl(200 40% 70% / 0.1);
   }
 }
 
@@ -148,12 +167,15 @@
     transform: translateY(100vh) scale(0);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   90% {
     opacity: 0.6;
   }
+
   100% {
     transform: translateY(-20vh) scale(1);
     opacity: 0;
@@ -161,11 +183,25 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes silhouette-breathe {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }

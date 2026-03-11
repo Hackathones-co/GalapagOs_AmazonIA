@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Map, BarChart3, MessageCircle, Layers, Home } from "lucide-react";
+import { Map, BarChart3, Layers, Home } from "lucide-react";
 
-type View = "home" | "map" | "dashboard" | "verticals" | "chat";
+type View = "home" | "map" | "dashboard" | "verticals";
 
 const NavigationBar = ({
   currentView,
@@ -15,7 +15,6 @@ const NavigationBar = ({
     { id: "map", label: "MAPA", icon: <Map className="w-4 h-4" /> },
     { id: "dashboard", label: "DATOS", icon: <BarChart3 className="w-4 h-4" /> },
     { id: "verticals", label: "MÓDULOS", icon: <Layers className="w-4 h-4" /> },
-    { id: "chat", label: "ASISTENTE", icon: <MessageCircle className="w-4 h-4" /> },
   ];
 
   return (
@@ -25,11 +24,10 @@ const NavigationBar = ({
           <button
             key={item.id}
             onClick={() => onViewChange(item.id)}
-            className={`flex flex-col items-center gap-0.5 p-2 transition-colors ${
-              currentView === item.id
+            className={`flex flex-col items-center gap-0.5 p-2 transition-colors ${currentView === item.id
                 ? "text-bioluminescent"
                 : "text-sand hover:text-foreground"
-            }`}
+              }`}
           >
             {item.icon}
             <span className="font-display text-[7px] tracking-[0.1em]">{item.label}</span>
