@@ -1,0 +1,58 @@
+steps:
+  # ── 1. Build de la imagen Docker ──────────────────────────────────────────
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'VITE_API_URL=${_API_URL}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:$SHORT_SHA'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:latest'
+      - '.'
+    id: 'build'
+
+  # ── 2. Push de la imagen ──────────────────────────────────────────────────
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}'
+    id: 'push'
+    waitFor: ['build']
+
+  # ── 3. Deploy a Cloud Run ─────────────────────────────────────────────────
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE}'
+      - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:$SHORT_SHA'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--timeout=60'
+      - '--concurrency=80'
+      - '--min-instances=0'
+      - '--max-instances=5'
+    id: 'deploy'
+    waitFor: ['push']
+
+# ── Imagen final publicada ────────────────────────────────────────────────────
+images:
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:$SHORT_SHA'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:latest'
+
+# ── Variables con valores por defecto (sobreescribibles en el trigger) ────────
+substitutions:
+  _REGION: us-central1
+  _REPO: sala-repo
+  _SERVICE: sala-galapagos-ui
+  _API_URL: https://sala-galapagos-api-<HASH>-uc.a.run.app/api/v1   # reemplaza con la URL real del backend
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
