@@ -143,7 +143,7 @@ const Index = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed bottom-36 md:bottom-24 right-8 z-50 w-[350px] h-[500px] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            className="fixed inset-0 md:inset-auto md:bottom-24 md:right-8 z-50 w-full h-full md:w-[350px] md:h-[500px] bg-card border-none md:border md:border-border md:rounded-2xl shadow-2xl overflow-hidden flex flex-col"
           >
             <ChatAssistant onClose={() => setIsChatOpen(false)} />
           </motion.div>
