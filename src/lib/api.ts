@@ -10,25 +10,31 @@ export const STATION_CODES: Record<string, string> = {
 
 // --- Types ---
 
+export interface EventPrediction {
+    event: string;
+    probability: number | null;
+    alert: boolean | null;
+    threshold: number;
+}
+
 export interface NowcastResponse {
     station: string;
     timestamp: string;
-    temperature_c?: number;
-    precipitation_mm?: number;
-    wind_kmh?: number;
-    humidity_pct?: number;
-    rain_prob_pct?: number;
-    [key: string]: unknown;
+    predictions: Record<string, EventPrediction>;
+}
+
+export interface AlertItem {
+    type: string;
+    severity: "low" | "medium" | "high" | "critical";
+    module: string;
+    message: string;
+    probability: number;
 }
 
 export interface AlertsResponse {
-    level: number;
-    level_name: string;
-    summary: string;
-    details?: string;
-    accumulated_mm?: number;
-    soil_saturation_pct?: number;
-    [key: string]: unknown;
+    timestamp: string;
+    active_alerts: AlertItem[];
+    overall_risk: "green" | "yellow" | "red";
 }
 
 export interface PescaScore {
@@ -71,11 +77,50 @@ export interface ChatResponse {
     [key: string]: unknown;
 }
 
+export interface RainfallPrediction {
+    timestamp: string;
+    station: string;
+    station_name: string;
+    horizon_h: number;
+    pred_class: number;
+    pred_prob_no_rain: number;
+    pred_prob_light: number;
+    pred_prob_heavy: number;
+    class_label: string;
+    tl: number;
+    th: number;
+    conditions: {
+        rh_pct: number;
+        temp_c: number;
+        wind_ms: number;
+        precip_mm: number;
+    };
+    data_source: string;
+}
+
 export interface VoiceSignedUrl {
     url: string;
     agent_id: string;
     dynamic_variables: Record<string, any>;
     [key: string]: unknown;
+}
+
+export interface HistoricalDataPoint {
+    timestamp: string;
+    temp_c: number;
+    rh_avg: number;
+    wind_speed_ms: number;
+    wind_dir: number;
+    rain_mm: number;
+    solar_kw: number;
+}
+
+export interface HistoricalResponse {
+    station: string;
+    station_name: string;
+    hours: number;
+    data_points: number;
+    data: HistoricalDataPoint[];
 }
 
 // ── Advisory types ────────────────────────────────────────────────────────────
@@ -302,12 +347,28 @@ export const api = {
     advisories: () =>
         fetchJson<AdvisoriesResponse>('/advisories'),
 
-    historicalEvents: async () => {
+    historicalEvents: () =>
+        fetchJson<HistoricalEventsResponse>('/historical'),
+
+    historicalSeries: (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
+        const qs = new URLSearchParams();
+        if (params?.from) qs.set('from', params.from);
+        if (params?.to) qs.set('to', params.to);
+        if (params?.limit) qs.set('limit', String(params.limit));
+        const q = qs.toString();
+        return fetchJson<HistoricalSeriesResponse>(`/historical/${eventId}${q ? '?' + q : ''}`);
+    },
+
+    historicalSummary: (eventId: string) =>
+        fetchJson<HistoricalSummaryResponse>(`/historical/${eventId}/summary`),
+
+    // Hardcoded alternatives (suffix 2)
+    historicalEvents2: async () => {
         console.log("Using hardcoded historical events");
         return { events: HISTORICAL_EVENTS, count: HISTORICAL_EVENTS.length };
     },
 
-    historicalSeries: async (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
+    historicalSeries2: async (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
         console.log(`Using hardcoded historical series for ${eventId}`);
         const series = HISTORICAL_SERIES[eventId] || [];
         return {
@@ -317,10 +378,16 @@ export const api = {
         };
     },
 
-    historicalSummary: async (eventId: string) => {
+    historicalSummary2: async (eventId: string) => {
         console.log(`Using hardcoded historical summary for ${eventId}`);
         const summary = HISTORICAL_SUMMARIES[eventId];
         if (!summary) throw new Error(`Historical summary not found for ${eventId}`);
         return summary;
     },
+
+    rainfall: (station: string, horizon: 1 | 3 | 6 = 1) =>
+        fetchJson<RainfallPrediction>(`/v4/rainfall/${station}?horizon=${horizon}`),
+
+    stationHistory: (station: string, hours: number = 24) =>
+        fetchJson<HistoricalResponse>(`/history/${station}?hours=${hours}`),
 };

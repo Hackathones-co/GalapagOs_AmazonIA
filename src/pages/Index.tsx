@@ -4,7 +4,7 @@ import HomeDashboard from "@/components/HomeDashboard";
 import BioluminescentParticles from "@/components/BioluminescentParticles";
 import NavigationBar, { type View } from "@/components/NavigationBar";
 import SanCristobalMap from "@/components/SanCristobalMap";
-import WeatherDashboard from "@/components/WeatherDashboard";
+import RainfallDashboard from "@/components/RainfallDashboard";
 import ChatAssistant from "@/components/ChatAssistant";
 import assistantIcon from "@/assets/assistant.png";
 import { VerticalsGrid } from "@/components/Verticals";
@@ -28,21 +28,31 @@ const Index = () => {
       timer = setTimeout(() => setIsIdle(true), IDLE_TIMEOUT);
     };
     const handleActivity = () => { resetIdle(); startTimer(); };
+
+    const handleNavigate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setCurrentView(customEvent.detail as View);
+      }
+    };
+
     window.addEventListener("mousemove", handleActivity);
     window.addEventListener("keydown", handleActivity);
     window.addEventListener("touchstart", handleActivity);
+    window.addEventListener("navigate", handleNavigate);
     startTimer();
     return () => {
       clearTimeout(timer);
       window.removeEventListener("mousemove", handleActivity);
       window.removeEventListener("keydown", handleActivity);
       window.removeEventListener("touchstart", handleActivity);
+      window.removeEventListener("navigate", handleNavigate);
     };
   }, [resetIdle]);
 
   const handleStationClick = (station: string) => {
     setSelectedStation(station);
-    setCurrentView("dashboard");
+    setCurrentView("rainfall");
   };
 
   return (
@@ -51,10 +61,8 @@ const Index = () => {
       <BioluminescentParticles active={isIdle && currentView === "home"} />
       <NavigationBar currentView={currentView} onViewChange={setCurrentView} />
 
-      {/* Content area - offset for nav */}
       <div className="md:ml-16 h-full pb-14 md:pb-0">
         <AnimatePresence mode="wait">
-          {/* HOME */}
           {currentView === "home" && (
             <motion.main
               key="home"
@@ -68,7 +76,19 @@ const Index = () => {
             </motion.main>
           )}
 
-          {/* MAP */}
+          {currentView === "rainfall" && (
+            <motion.div
+              key="rainfall"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full pt-14 overflow-y-auto"
+            >
+              <RainfallDashboard />
+            </motion.div>
+          )}
+
           {currentView === "map" && (
             <motion.div
               key="map"
@@ -82,21 +102,6 @@ const Index = () => {
             </motion.div>
           )}
 
-          {/* DASHBOARD */}
-          {currentView === "dashboard" && (
-            <motion.div
-              key="dashboard"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="w-full h-full pt-14 overflow-y-auto"
-            >
-              <WeatherDashboard station={selectedStation} />
-            </motion.div>
-          )}
-
-          {/* VERTICALS */}
           {currentView === "verticals" && (
             <motion.div
               key="verticals"
@@ -110,7 +115,6 @@ const Index = () => {
             </motion.div>
           )}
 
-          {/* HISTORICAL */}
           {currentView === "historical" && (
             <motion.div
               key="historical"
@@ -126,7 +130,6 @@ const Index = () => {
         </AnimatePresence>
       </div>
 
-      {/* Floating Chatbot Button */}
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
         className="fixed bottom-20 md:bottom-8 right-8 z-50 p-0 rounded-full bg-primary text-primary-foreground shadow-bioluminescent hover:scale-110 transition-transform overflow-hidden"
@@ -134,7 +137,6 @@ const Index = () => {
         <img src={assistantIcon} alt="Assistant" className="w-20 h-20" />
       </button>
 
-      {/* Floating Chatbot Popup */}
       <AnimatePresence>
         {isChatOpen && (
           <motion.div

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AreaChart, Area, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { api, NowcastResponse, AlertsResponse, STATION_CODES } from "@/lib/api";
+import { api, AlertsResponse } from "@/lib/api";
 
 const STATIONS = ["Cerro Alto", "El Junco", "Merceditas", "El Mirador"];
 const CODES = ["cer", "jun", "merc", "mira"];
@@ -36,22 +36,10 @@ const WeatherDashboard = ({ station }: { station?: string }) => {
 
   // Fetch live data
   useEffect(() => {
-    const code = station ? STATION_CODES[station] ?? "jun" : "jun";
     setLoading(true);
     Promise.allSettled([
-      api.nowcast(code),
       api.alerts(),
-    ]).then(([nowcastResult, alertsResult]) => {
-      if (nowcastResult.status === "fulfilled") {
-        const d = nowcastResult.value as NowcastResponse;
-        setStats({
-          temperature: d.temperature_c,
-          precipitation: d.precipitation_mm,
-          wind: d.wind_kmh,
-          humidity: d.humidity_pct,
-          rain_prob: d.rain_prob_pct,
-        });
-      }
+    ]).then(([alertsResult]) => {
       if (alertsResult.status === "fulfilled") {
         setAlerts(alertsResult.value as AlertsResponse);
       }
@@ -85,9 +73,8 @@ const WeatherDashboard = ({ station }: { station?: string }) => {
     suelo: (stats.humidity ?? 65) * 0.7 + Math.sin(i / 8) * 8,
   }));
 
-  const alertColor = alerts?.level === 4 ? "#f44336" :
-    alerts?.level === 3 ? "#ff9800" :
-      alerts?.level === 2 ? "#ffaa00" : "#4caf50";
+  const alertColor = alerts?.overall_risk === "red" ? "#f44336" :
+    alerts?.overall_risk === "yellow" ? "#ff9800" : "#4caf50";
 
   return (
     <div className="w-full h-full overflow-y-auto p-6 space-y-6">
@@ -119,10 +106,10 @@ const WeatherDashboard = ({ station }: { station?: string }) => {
           <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: alertColor }} />
           <div>
             <span className="font-display text-[9px] tracking-widest" style={{ color: alertColor }}>
-              ALERTA: {alerts.level_name?.toUpperCase() ?? "NORMAL"}
+              RIESGO: {alerts.overall_risk?.toUpperCase() ?? "VERDE"}
             </span>
-            {alerts.summary && (
-              <p className="font-body text-[9px] text-sand mt-0.5">{alerts.summary}</p>
+            {alerts.active_alerts.length > 0 && (
+              <p className="font-body text-[9px] text-sand mt-0.5">{alerts.active_alerts[0].message}</p>
             )}
           </div>
         </div>

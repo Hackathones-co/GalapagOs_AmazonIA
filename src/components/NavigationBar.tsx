@@ -1,6 +1,6 @@
-import { Map, BarChart3, Layers, Home, History } from "lucide-react";
+import { Map, Layers, Home, CloudRain, History } from "lucide-react";
 
-type View = "home" | "map" | "dashboard" | "verticals" | "historical";
+type View = "home" | "map" | "verticals" | "historical" | "rainfall";
 
 const NavigationBar = ({
   currentView,
@@ -11,8 +11,8 @@ const NavigationBar = ({
 }) => {
   const items: { id: View; label: string; icon: React.ReactNode }[] = [
     { id: "home",       label: "INICIO",     icon: <Home      className="w-4 h-4" /> },
+    { id: "rainfall",   label: "LLUVIA",     icon: <CloudRain className="w-4 h-4" /> },
     { id: "map",        label: "MAPA",       icon: <Map       className="w-4 h-4" /> },
-    { id: "dashboard",  label: "DATOS",      icon: <BarChart3 className="w-4 h-4" /> },
     { id: "verticals",  label: "MÓDULOS",    icon: <Layers    className="w-4 h-4" /> },
     { id: "historical", label: "HISTÓRICOS", icon: <History   className="w-4 h-4" /> },
   ];
