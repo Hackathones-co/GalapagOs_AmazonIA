@@ -144,9 +144,10 @@ export interface HistoricalEvent {
     label: string;
     type: string;
     description: string;
-    date_start: string;
-    date_end: string;
-    total_days: number;
+    date_start?: string;
+    date_end?: string;
+    total_days?: number;
+    error?: string;
 }
 
 export interface HistoricalEventsResponse {
@@ -213,6 +214,46 @@ const fetchJson = async <T>(path: string, opts?: RequestInit): Promise<T> => {
     return res.json() as Promise<T>;
 };
 
+// --- Mocks ---
+
+const MOCK_HISTORICAL_EVENTS: HistoricalEvent[] = [
+    {
+        id: "el_nino_1982_83",
+        label: "El Niño 1982–1983",
+        type: "el_nino",
+        description: "Uno de los El Niño más intensos del siglo XX. Lluvias extremas en Galápagos.",
+        error: "CSV not found: app/data/el_nino_1982_83.csv"
+    },
+    {
+        id: "el_nino_1997_98",
+        label: "El Niño 1997–1998",
+        type: "el_nino",
+        description: "El Niño más intenso registrado. Inundaciones masivas y daños severos.",
+        error: "CSV not found: app/data/el_nino_1997_98.csv"
+    },
+    {
+        id: "el_nino_2015_16",
+        label: "El Niño 2015–2016",
+        type: "el_nino",
+        description: "Tercer El Niño más fuerte en el registro histórico.",
+        error: "CSV not found: app/data/el_nino_2015_16.csv"
+    },
+    {
+        id: "la_nina_2010_11",
+        label: "La Niña 2010–2011",
+        type: "la_nina",
+        description: "Período de sequía y temperaturas frías en el Pacífico ecuatorial.",
+        error: "CSV not found: app/data/la_nina_2010_11.csv"
+    },
+    {
+        id: "floods_2023_24",
+        label: "Inundaciones 2023–2024",
+        type: "floods",
+        description: "Evento de inundaciones recientes en San Cristóbal asociado a El Niño 2023.",
+        error: "CSV not found: app/data/floods_2023_24.csv"
+    }
+];
+
 // --- Endpoints ---
 
 export const api = {
@@ -259,8 +300,14 @@ export const api = {
     advisories: () =>
         fetchJson<AdvisoriesResponse>('/advisories'),
 
-    historicalEvents: () =>
-        fetchJson<HistoricalEventsResponse>('/historical'),
+    historicalEvents: async () => {
+        try {
+            return await fetchJson<HistoricalEventsResponse>('/historical');
+        } catch (e) {
+            console.warn("Historical events fetch failed, using mock data", e);
+            return { events: MOCK_HISTORICAL_EVENTS, count: MOCK_HISTORICAL_EVENTS.length };
+        }
+    },
 
     historicalSeries: (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
         const qs = new URLSearchParams();

@@ -11,12 +11,12 @@ import { motion, AnimatePresence } from "framer-motion";
 const TYPE_COLOR: Record<string, string> = {
   el_nino: "#EF476F",
   la_nina: "#118AB2",
-  floods:  "#FFD166",
+  floods: "#FFD166",
 };
 const TYPE_LABEL: Record<string, string> = {
   el_nino: "El Niño",
   la_nina: "La Niña",
-  floods:  "Inundaciones",
+  floods: "Inundaciones",
 };
 
 const fmt = (n: number, d = 1) => n?.toFixed(d) ?? "—";
@@ -100,7 +100,7 @@ const HistoricalDashboard = () => {
   useEffect(() => {
     api.historicalEvents()
       .then((r) => setEvents(r.events))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoadingEvents(false));
   }, []);
 
@@ -118,7 +118,7 @@ const HistoricalDashboard = () => {
         setSummary(sum);
         setSeries(downsample(ser.data));
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoadingDetail(false));
   }, [selectedId]);
 
@@ -169,15 +169,21 @@ const HistoricalDashboard = () => {
                     >
                       {TYPE_LABEL[ev.type] ?? ev.type}
                     </span>
-                    <span className="font-body text-[9px] text-foreground/40">{ev.total_days}d</span>
+                    {ev.total_days !== undefined && <span className="font-body text-[9px] text-foreground/40">{ev.total_days}d</span>}
                   </div>
                   <div>
                     <p className="font-display text-sm text-foreground tracking-wide leading-tight">{ev.label}</p>
                     <p className="font-body text-[10px] text-foreground/50 mt-1 line-clamp-2">{ev.description}</p>
                   </div>
-                  <p className="font-body text-[9px] text-foreground/30">
-                    {ev.date_start.slice(0, 7)} → {ev.date_end.slice(0, 7)}
-                  </p>
+                  {ev.error ? (
+                    <p className="font-body text-[9px] text-destructive/80 mt-2 bg-destructive/10 px-2 py-1 rounded border border-destructive/20 line-clamp-1 italic">
+                      Error: {ev.error.split(':')[0]}
+                    </p>
+                  ) : (
+                    <p className="font-body text-[9px] text-foreground/30 mt-2">
+                      {ev.date_start?.slice(0, 7)} → {ev.date_end?.slice(0, 7)}
+                    </p>
+                  )}
                 </motion.button>
               );
             })}
@@ -203,17 +209,22 @@ const HistoricalDashboard = () => {
                 {loadingDetail && (
                   <span className="font-body text-[10px] text-foreground/40 animate-pulse">Cargando datos...</span>
                 )}
+                {selectedEvent?.error && !loadingDetail && (
+                  <span className="font-body text-[10px] text-destructive/80 bg-destructive/10 px-2 py-0.5 rounded border border-destructive/20">
+                    Archivo de datos no encontrado en el servidor
+                  </span>
+                )}
               </div>
 
               {/* Stat cards */}
-              {summary && (
+              {summary && summary.stats && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                  <StatCard label="TEMPERATURA" unit="°C"  stat={summary.stats.temp_c}     color={accentColor} />
-                  <StatCard label="PRECIPITACIÓN" unit="mm" stat={summary.stats.precip_mm}  color="#60C8F5" />
-                  <StatCard label="VIENTO" unit="m/s"       stat={summary.stats.wind_ms}    color="#06D6A0" />
-                  <StatCard label="TEMP. ROCÍO" unit="°C"   stat={summary.stats.dewpoint_c} color="#FFD166" />
-                  <StatCard label="TEMP. MAR" unit="°C"     stat={summary.stats.sst_c}      color="#118AB2" />
-                  <StatCard label="RADIACIÓN" unit="W/m²"   stat={summary.stats.solar_wm2}  color="#FFB347" />
+                  {summary.stats.temp_c && <StatCard label="TEMPERATURA" unit="°C" stat={summary.stats.temp_c} color={accentColor} />}
+                  {summary.stats.precip_mm && <StatCard label="PRECIPITACIÓN" unit="mm" stat={summary.stats.precip_mm} color="#60C8F5" />}
+                  {summary.stats.wind_ms && <StatCard label="VIENTO" unit="m/s" stat={summary.stats.wind_ms} color="#06D6A0" />}
+                  {summary.stats.dewpoint_c && <StatCard label="TEMP. ROCÍO" unit="°C" stat={summary.stats.dewpoint_c} color="#FFD166" />}
+                  {summary.stats.sst_c && <StatCard label="TEMP. MAR" unit="°C" stat={summary.stats.sst_c} color="#118AB2" />}
+                  {summary.stats.solar_wm2 && <StatCard label="RADIACIÓN" unit="W/m²" stat={summary.stats.solar_wm2} color="#FFB347" />}
                 </div>
               )}
 
@@ -231,7 +242,7 @@ const HistoricalDashboard = () => {
                         <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${fmt(v)} °C`, "Temp"]} labelFormatter={shortDate} />
                         <ReferenceLine y={summary?.stats.temp_c.mean} stroke={accentColor} strokeDasharray="4 4" strokeOpacity={0.5} />
                         <Line type="monotone" dataKey="temp_c" stroke={accentColor} strokeWidth={1.5} dot={false} name="Temperatura" />
-                        <Line type="monotone" dataKey="sst_c"  stroke="#118AB2"    strokeWidth={1}   dot={false} name="Temp. mar" strokeDasharray="3 3" />
+                        <Line type="monotone" dataKey="sst_c" stroke="#118AB2" strokeWidth={1} dot={false} name="Temp. mar" strokeDasharray="3 3" />
                       </LineChart>
                     </ResponsiveContainer>
                   </ChartCard>
@@ -285,7 +296,7 @@ const HistoricalDashboard = () => {
                         <YAxis tick={{ fontSize: 9, fill: "#666" }} domain={["auto", "auto"]} />
                         <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${fmt(v, 1)} hPa`, "Presión"]} labelFormatter={shortDate} />
                         <Line type="monotone" dataKey="pressure_hpa" stroke="#A78BFA" strokeWidth={1.5} dot={false} name="Estación" />
-                        <Line type="monotone" dataKey="msl_hpa"      stroke="#C4B5FD" strokeWidth={1}   dot={false} name="Nivel mar" strokeDasharray="3 3" />
+                        <Line type="monotone" dataKey="msl_hpa" stroke="#C4B5FD" strokeWidth={1} dot={false} name="Nivel mar" strokeDasharray="3 3" />
                         <Legend wrapperStyle={{ fontSize: 9, color: "#888" }} />
                       </LineChart>
                     </ResponsiveContainer>
