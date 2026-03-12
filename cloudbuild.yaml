@@ -51,7 +51,7 @@ substitutions:
   _REGION: us-central1
   _REPO: sala-repo
   _SERVICE: sala-galapagos-ui
-  _API_URL: https://sala-galapagos-api-<HASH>-uc.a.run.app/api/v1   # reemplaza con la URL real del backend
+  _API_URL: https://sala-galapagos-api-629631305612.us-central1.run.app/api/v1
 
 options:
   logging: CLOUD_LOGGING_ONLY
