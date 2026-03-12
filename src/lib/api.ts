@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1";
+const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8001/api/v1";
 
 // Station codes mapping
 export const STATION_CODES: Record<string, string> = {
@@ -10,25 +10,31 @@ export const STATION_CODES: Record<string, string> = {
 
 // --- Types ---
 
+export interface EventPrediction {
+    event: string;
+    probability: number | null;
+    alert: boolean | null;
+    threshold: number;
+}
+
 export interface NowcastResponse {
     station: string;
     timestamp: string;
-    temperature_c?: number;
-    precipitation_mm?: number;
-    wind_kmh?: number;
-    humidity_pct?: number;
-    rain_prob_pct?: number;
-    [key: string]: unknown;
+    predictions: Record<string, EventPrediction>;
+}
+
+export interface AlertItem {
+    type: string;
+    severity: "low" | "medium" | "high" | "critical";
+    module: string;
+    message: string;
+    probability: number;
 }
 
 export interface AlertsResponse {
-    level: number;
-    level_name: string;
-    summary: string;
-    details?: string;
-    accumulated_mm?: number;
-    soil_saturation_pct?: number;
-    [key: string]: unknown;
+    timestamp: string;
+    active_alerts: AlertItem[];
+    overall_risk: "green" | "yellow" | "red";
 }
 
 export interface PescaScore {
@@ -71,11 +77,50 @@ export interface ChatResponse {
     [key: string]: unknown;
 }
 
+export interface RainfallPrediction {
+    timestamp: string;
+    station: string;
+    station_name: string;
+    horizon_h: number;
+    pred_class: number;
+    pred_prob_no_rain: number;
+    pred_prob_light: number;
+    pred_prob_heavy: number;
+    class_label: string;
+    tl: number;
+    th: number;
+    conditions: {
+        rh_pct: number;
+        temp_c: number;
+        wind_ms: number;
+        precip_mm: number;
+    };
+    data_source: string;
+}
+
 export interface VoiceSignedUrl {
     url: string;
     agent_id: string;
     dynamic_variables: Record<string, any>;
     [key: string]: unknown;
+}
+
+export interface HistoricalDataPoint {
+    timestamp: string;
+    temp_c: number;
+    rh_avg: number;
+    wind_speed_ms: number;
+    wind_dir: number;
+    rain_mm: number;
+    solar_kw: number;
+}
+
+export interface HistoricalResponse {
+    station: string;
+    station_name: string;
+    hours: number;
+    data_points: number;
+    data: HistoricalDataPoint[];
 }
 
 // ── Advisory types ────────────────────────────────────────────────────────────
@@ -273,4 +318,10 @@ export const api = {
 
     historicalSummary: (eventId: string) =>
         fetchJson<HistoricalSummaryResponse>(`/historical/${eventId}/summary`),
+
+    rainfall: (station: string, horizon: 1 | 3 | 6 = 1) =>
+        fetchJson<RainfallPrediction>(`/v4/rainfall/${station}?horizon=${horizon}`),
+
+    stationHistory: (station: string, hours: number = 24) =>
+        fetchJson<HistoricalResponse>(`/history/${station}?hours=${hours}`),
 };
