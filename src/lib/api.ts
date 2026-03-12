@@ -256,10 +256,6 @@ const MOCK_HISTORICAL_EVENTS: HistoricalEvent[] = [
     }
 ];
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 // --- Endpoints ---
 
 export const api = {
@@ -307,30 +303,9 @@ export const api = {
         fetchJson<AdvisoriesResponse>('/advisories'),
 
     historicalEvents: async () => {
-        try {
-            return await fetchJson<HistoricalEventsResponse>('/historical');
-        } catch (e) {
-            console.warn("Historical events fetch failed, using mock data", e);
-            return { events: MOCK_HISTORICAL_EVENTS, count: MOCK_HISTORICAL_EVENTS.length };
-        }
-    },
-
-    historicalSeries: (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
-        const qs = new URLSearchParams();
-        if (params?.from) qs.set('from', params.from);
-        if (params?.to) qs.set('to', params.to);
-        if (params?.limit) qs.set('limit', String(params.limit));
-        const q = qs.toString();
-        return fetchJson<HistoricalSeriesResponse>(`/historical/${eventId}${q ? '?' + q : ''}`);
-<<<<<<< Updated upstream
-    historicalEvents: () =>
-        fetchJson<HistoricalEventsResponse>('/historical'),
-=======
-    historicalEvents: async () => {
         console.log("Using hardcoded historical events");
         return { events: HISTORICAL_EVENTS, count: HISTORICAL_EVENTS.length };
     },
->>>>>>> Stashed changes
 
     historicalSeries: async (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
         console.log(`Using hardcoded historical series for ${eventId}`);
