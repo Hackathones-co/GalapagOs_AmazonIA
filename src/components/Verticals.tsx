@@ -427,6 +427,13 @@ const VerticalModal = ({ vertical, advisory, onClose }: VerticalModalProps) => {
               <h2 className="font-display text-base sm:text-2xl text-foreground tracking-[0.1em] truncate">{vertical.name}</h2>
               <p className="font-body text-[9px] sm:text-xs text-sand mt-0.5">{vertical.users}</p>
             </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-sand hover:text-foreground transition-colors" />
+            </button>
           </div>
 
           {/* Content */}
@@ -660,6 +667,9 @@ const ServicesModal = ({ isOpen, onClose }: ServicesModalProps) => {
                 <h2 className="font-display text-base sm:text-2xl text-foreground tracking-[0.1em] truncate">SERVICIOS DE EMERGENCIA</h2>
                 <p className="font-body text-[9px] sm:text-xs text-sand mt-0.5">Salud, Abastecimiento, Farmacias y Seguridad</p>
               </div>
+              <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0" aria-label="Cerrar">
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-sand hover:text-foreground transition-colors" />
+              </button>
             </div>
 
             {/* Content */}
