@@ -1,0 +1,181 @@
+# Entrega de Archivos JSON - Históricos
+
+Aquí tienes todos los datos organizados por archivo. Puedes copiar el contenido de cada bloque según lo necesites.
+
+## 1. historical_events.json
+*Lista de todos los eventos con su metadata básica.*
+
+```json
+{
+  "events": [
+    {
+      "id": "el_nino_1982_83",
+      "label": "El Niño 1982–1983",
+      "type": "el_nino",
+      "description": "Uno de los El Niño más intensos del siglo XX. Lluvias extremas en Galápagos.",
+      "date_start": "1982-09-01 12:00:00",
+      "date_end": "1983-06-30 12:00:00",
+      "total_days": 303
+    },
+    {
+      "id": "el_nino_1997_98",
+      "label": "El Niño 1997–1998",
+      "type": "el_nino",
+      "description": "El Niño más intenso registrado. Inundaciones masivas y daños severos.",
+      "date_start": "1997-05-01 12:00:00",
+      "date_end": "1998-07-31 12:00:00",
+      "total_days": 457
+    },
+    {
+      "id": "el_nino_2015_16",
+      "label": "El Niño 2015–2016",
+      "type": "el_nino",
+      "description": "Tercer El Niño más fuerte en el registro histórico.",
+      "date_start": "2015-03-01 12:00:00",
+      "date_end": "2016-06-30 12:00:00",
+      "total_days": 488
+    },
+    {
+      "id": "la_nina_2010_11",
+      "label": "La Niña 2010–2011",
+      "type": "la_nina",
+      "description": "Período de sequía y temperaturas frías en el Pacífico ecuatorial.",
+      "date_start": "2010-06-01 12:00:00",
+      "date_end": "2011-04-30 12:00:00",
+      "total_days": 334
+    },
+    {
+      "id": "floods_2023_24",
+      "label": "Inundaciones 2023–2024",
+      "type": "floods",
+      "description": "Evento de inundaciones recientes en San Cristóbal asociado a El Niño 2023.",
+      "date_start": "2023-10-01 12:00:00",
+      "date_end": "2024-02-29 12:00:00",
+      "total_days": 152
+    }
+  ],
+  "count": 5
+}
+```
+
+## 2. Resúmenes Estadísticos
+*Archivos individuales `summary_{id}.json`.*
+
+````carousel
+### summary_el_nino_1982_83.json
+```json
+{
+  "event": {
+    "id": "el_nino_1982_83",
+    "label": "El Niño 1982–1983",
+    "type": "el_nino",
+    "description": "Uno de los El Niño más intensos del siglo XX. Lluvias extremas en Galápagos.",
+    "date_start": "1982-09-01 12:00:00",
+    "date_end": "1983-06-30 12:00:00",
+    "total_days": 303
+  },
+  "stats": {
+    "precip_mm": { "mean": 0.314, "max": 2.593, "min": 0.006 },
+    "sst_c": { "mean": 27.711, "max": 30.36, "min": 24.507 },
+    "temp_c": { "mean": 25.714, "max": 27.783, "min": 23.036 },
+    "wind_ms": { "mean": 3.507, "max": 8.205, "min": 0.028 }
+  }
+}
+```
+<!-- slide -->
+### summary_el_nino_1997_98.json
+```json
+{
+  "event": {
+    "id": "el_nino_1997_98",
+    "label": "El Niño 1997–1998",
+    "type": "el_nino",
+    "description": "El Niño más intenso registrado. Inundaciones masivas y daños severos.",
+    "date_start": "1997-05-01 12:00:00",
+    "date_end": "1998-07-31 12:00:00",
+    "total_days": 457
+  },
+  "stats": {
+    "precip_mm": { "mean": 0.24, "max": 2.373, "min": 0.0 },
+    "sst_c": { "mean": 27.645, "max": 30.338, "min": 23.314 },
+    "temp_c": { "mean": 26.026, "max": 28.274, "min": 22.375 },
+    "wind_ms": { "mean": 4.747, "max": 8.257, "min": 0.202 }
+  }
+}
+```
+<!-- slide -->
+### summary_el_nino_2015_16.json
+```json
+{
+  "event": {
+    "id": "el_nino_2015_16",
+    "label": "El Niño 2015–2016",
+    "type": "el_nino",
+    "description": "Tercer El Niño más fuerte en el registro histórico.",
+    "date_start": "2015-03-01 12:00:00",
+    "date_end": "2016-06-30 12:00:00",
+    "total_days": 488
+  },
+  "stats": {
+    "precip_mm": { "mean": 0.076, "max": 2.075, "min": 0.0 },
+    "sst_c": { "mean": 26.046, "max": 28.694, "min": 22.535 },
+    "temp_c": { "mean": 24.991, "max": 27.511, "min": 22.129 },
+    "wind_ms": { "mean": 4.67, "max": 8.466, "min": 0.451 }
+  }
+}
+```
+<!-- slide -->
+### summary_la_nina_2010_11.json
+```json
+{
+  "event": {
+    "id": "la_nina_2010_11",
+    "label": "La Niña 2010–2011",
+    "type": "la_nina",
+    "description": "Período de sequía y temperaturas frías en el Pacífico ecuatorial.",
+    "date_start": "2010-06-01 12:00:00",
+    "date_end": "2011-04-30 12:00:00",
+    "total_days": 334
+  },
+  "stats": {
+    "precip_mm": { "mean": 0.093, "max": 1.59, "min": 0.0 },
+    "sst_c": { "mean": 23.655, "max": 28.315, "min": 19.452 },
+    "temp_c": { "mean": 22.338, "max": 26.431, "min": 18.857 },
+    "wind_ms": { "mean": 4.39, "max": 8.518, "min": 0.296 }
+  }
+}
+```
+<!-- slide -->
+### summary_floods_2023_24.json
+```json
+{
+  "event": {
+    "id": "floods_2023_24",
+    "label": "Inundaciones 2023–2024",
+    "type": "floods",
+    "description": "Evento de inundaciones recientes en San Cristóbal asociado a El Niño 2023.",
+    "date_start": "2023-10-01 12:00:00",
+    "date_end": "2024-02-29 12:00:00",
+    "total_days": 152
+  },
+  "stats": {
+    "precip_mm": { "mean": 0.07, "max": 1.149, "min": 0.002 },
+    "sst_c": { "mean": 26.348, "max": 28.668, "min": 24.794 },
+    "temp_c": { "mean": 25.242, "max": 27.249, "min": 23.654 },
+    "wind_ms": { "mean": 5.236, "max": 7.633, "min": 2.057 }
+  }
+}
+```
+````
+
+## 3. Datos Diarios (Archivos Completos)
+*Series históricas completas.*
+
+> [!TIP]
+> Puedes descargar los archivos completos haciendo clic en los enlaces a continuación para ver el JSON crudo en tu sistema.
+
+- [data_el_nino_1982_83.json](file:///C:/Users/maaro/.gemini/antigravity/brain/b3791867-01d6-469e-b8b1-b5e8a9636afb/data_el_nino_1982_83.json)
+- [data_el_nino_1997_98.json](file:///C:/Users/maaro/.gemini/antigravity/brain/b3791867-01d6-469e-b8b1-b5e8a9636afb/data_el_nino_1997_98.json)
+- [data_el_nino_2015_16.json](file:///C:/Users/maaro/.gemini/antigravity/brain/b3791867-01d6-469e-b8b1-b5e8a9636afb/data_el_nino_2015_16.json)
+- [data_la_nina_2010_11.json](file:///C:/Users/maaro/.gemini/antigravity/brain/b3791867-01d6-469e-b8b1-b5e8a9636afb/data_la_nina_2010_11.json)
+- [data_floods_2023_24.json](file:///C:/Users/maaro/.gemini/antigravity/brain/b3791867-01d6-469e-b8b1-b5e8a9636afb/data_floods_2023_24.json)

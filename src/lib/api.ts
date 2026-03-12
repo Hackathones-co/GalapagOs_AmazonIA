@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1";
+const BASE_URL = "https://sala-galapagos-api-629631305612.us-central1.run.app/api/v1";
 
 // Station codes mapping
 export const STATION_CODES: Record<string, string> = {
@@ -137,6 +137,8 @@ export interface AdvisoriesResponse {
     timestamp: string;
 }
 
+import { HISTORICAL_EVENTS, HISTORICAL_SUMMARIES, HISTORICAL_SERIES } from "./historicalDataStore";
+
 // ── Historical types ──────────────────────────────────────────────────────────
 
 export interface HistoricalEvent {
@@ -213,6 +215,10 @@ const fetchJson = async <T>(path: string, opts?: RequestInit): Promise<T> => {
     return res.json() as Promise<T>;
 };
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 // --- Endpoints ---
 
 export const api = {
@@ -259,18 +265,30 @@ export const api = {
     advisories: () =>
         fetchJson<AdvisoriesResponse>('/advisories'),
 
+<<<<<<< Updated upstream
     historicalEvents: () =>
         fetchJson<HistoricalEventsResponse>('/historical'),
+=======
+    historicalEvents: async () => {
+        console.log("Using hardcoded historical events");
+        return { events: HISTORICAL_EVENTS, count: HISTORICAL_EVENTS.length };
+    },
+>>>>>>> Stashed changes
 
-    historicalSeries: (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
-        const qs = new URLSearchParams();
-        if (params?.from) qs.set('from', params.from);
-        if (params?.to) qs.set('to', params.to);
-        if (params?.limit) qs.set('limit', String(params.limit));
-        const q = qs.toString();
-        return fetchJson<HistoricalSeriesResponse>(`/historical/${eventId}${q ? '?' + q : ''}`);
+    historicalSeries: async (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
+        console.log(`Using hardcoded historical series for ${eventId}`);
+        const series = HISTORICAL_SERIES[eventId] || [];
+        return {
+            event: HISTORICAL_EVENTS.find(e => e.id === eventId)!,
+            data: series,
+            count: series.length
+        };
     },
 
-    historicalSummary: (eventId: string) =>
-        fetchJson<HistoricalSummaryResponse>(`/historical/${eventId}/summary`),
+    historicalSummary: async (eventId: string) => {
+        console.log(`Using hardcoded historical summary for ${eventId}`);
+        const summary = HISTORICAL_SUMMARIES[eventId];
+        if (!summary) throw new Error(`Historical summary not found for ${eventId}`);
+        return summary;
+    },
 };
