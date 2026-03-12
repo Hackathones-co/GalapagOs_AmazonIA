@@ -8,6 +8,7 @@ import WeatherDashboard from "@/components/WeatherDashboard";
 import ChatAssistant from "@/components/ChatAssistant";
 import assistantIcon from "@/assets/assistant.png";
 import { VerticalsGrid } from "@/components/Verticals";
+import HistoricalDashboard from "@/components/HistoricalDashboard";
 import { motion, AnimatePresence } from "framer-motion";
 
 const IDLE_TIMEOUT = 60000;
@@ -106,6 +107,20 @@ const Index = () => {
               className="w-full h-full pt-14"
             >
               <VerticalsGrid onStationClick={handleStationClick} />
+            </motion.div>
+          )}
+
+          {/* HISTORICAL */}
+          {currentView === "historical" && (
+            <motion.div
+              key="historical"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full pt-14 overflow-y-auto"
+            >
+              <HistoricalDashboard />
             </motion.div>
           )}
         </AnimatePresence>
