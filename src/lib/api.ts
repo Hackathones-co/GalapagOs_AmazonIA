@@ -1,4 +1,4 @@
-const BASE_URL = "https://sala-galapagos-api-629631305612.us-central1.run.app/api/v1";
+const BASE_URL = "http://localhost:8000/api/v1";
 
 // Station codes mapping
 export const STATION_CODES: Record<string, string> = {
@@ -347,6 +347,7 @@ export const api = {
     advisories: () =>
         fetchJson<AdvisoriesResponse>('/advisories'),
 
+    // --- Historical (Live) ---
     historicalEvents: () =>
         fetchJson<HistoricalEventsResponse>('/historical'),
 
@@ -362,7 +363,7 @@ export const api = {
     historicalSummary: (eventId: string) =>
         fetchJson<HistoricalSummaryResponse>(`/historical/${eventId}/summary`),
 
-    // Hardcoded alternatives (suffix 2)
+    // --- Historical (Hardcoded / Suffix 2) ---
     historicalEvents2: async () => {
         console.log("Using hardcoded historical events");
         return { events: HISTORICAL_EVENTS, count: HISTORICAL_EVENTS.length };

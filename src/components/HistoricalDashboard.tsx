@@ -98,7 +98,7 @@ const HistoricalDashboard = () => {
 
   // Load event list
   useEffect(() => {
-    api.historicalEvents()
+    api.historicalEvents2()
       .then((r) => setEvents(r.events))
       .catch(() => { })
       .finally(() => setLoadingEvents(false));
@@ -111,8 +111,8 @@ const HistoricalDashboard = () => {
     setSummary(null);
     setSeries([]);
     Promise.all([
-      api.historicalSummary(selectedId),
-      api.historicalSeries(selectedId),
+      api.historicalSummary2(selectedId),
+      api.historicalSeries2(selectedId),
     ])
       .then(([sum, ser]) => {
         setSummary(sum);
