@@ -78,6 +78,121 @@ export interface VoiceSignedUrl {
     [key: string]: unknown;
 }
 
+// ── Advisory types ────────────────────────────────────────────────────────────
+
+export type AdvisoryLevel = 'safe' | 'info' | 'caution' | 'danger';
+
+interface AdvisoryBase {
+    level: AdvisoryLevel;
+    title: string;
+    emoji: string;
+    detail: string;
+    action: string;
+}
+
+export interface PescaAdvisory extends AdvisoryBase {
+    wind_ms: number;
+    wind_dir_deg: number;
+    wind_cardinal: string;
+    heavy_rain_1h: boolean;
+    heavy_rain_3h: boolean;
+}
+
+export interface AgroAdvisory extends AdvisoryBase {
+    rain_24h_mm: number;
+    heavy_6h: boolean;
+}
+
+export interface BiodiversidadAdvisory extends AdvisoryBase {
+    temp_c: number;
+    rh_pct: number;
+    alerts: string[];
+}
+
+export interface RiesgoAdvisory extends AdvisoryBase {
+    flash_flood_risk: boolean;
+    heavy_highland_1h: boolean;
+    heavy_highland_3h: boolean;
+    clear_coastal: boolean;
+}
+
+export interface TurismoAdvisory extends AdvisoryBase {
+    condition_desc: string;
+    condition_type: string;
+    temp_c: number;
+    comfort_index: number;
+    activities: string[];
+}
+
+export interface AdvisoriesResponse {
+    advisories: {
+        pesca: PescaAdvisory;
+        agro: AgroAdvisory;
+        biodiversidad: BiodiversidadAdvisory;
+        riesgo: RiesgoAdvisory;
+        turismo: TurismoAdvisory;
+    };
+    predictions?: unknown[];
+    stations?: Record<string, unknown>;
+    timestamp: string;
+}
+
+// ── Historical types ──────────────────────────────────────────────────────────
+
+export interface HistoricalEvent {
+    id: string;
+    label: string;
+    type: string;
+    description: string;
+    date_start: string;
+    date_end: string;
+    total_days: number;
+}
+
+export interface HistoricalEventsResponse {
+    events: HistoricalEvent[];
+    count: number;
+}
+
+export interface HistoricalDataRow {
+    date: string;
+    temp_c: number;
+    dewpoint_c: number;
+    sst_c: number;
+    wind_ms: number;
+    wind_dir_deg: number;
+    pressure_hpa: number;
+    msl_hpa: number;
+    precip_mm: number;
+    solar_wm2: number;
+}
+
+export interface HistoricalSeriesResponse {
+    event: HistoricalEvent;
+    data: HistoricalDataRow[];
+    count: number;
+}
+
+export interface HistoricalStat {
+    mean: number;
+    max: number;
+    min: number;
+}
+
+export interface HistoricalSummaryResponse {
+    event: HistoricalEvent;
+    stats: {
+        temp_c: HistoricalStat;
+        precip_mm: HistoricalStat;
+        wind_ms: HistoricalStat;
+        dewpoint_c: HistoricalStat;
+        sst_c: HistoricalStat;
+        pressure_hpa: HistoricalStat;
+        msl_hpa: HistoricalStat;
+        solar_wm2: HistoricalStat;
+    };
+}
+
 // --- Helpers ---
 
 const fetchJson = async <T>(path: string, opts?: RequestInit): Promise<T> => {
@@ -140,4 +255,22 @@ export const api = {
 
     getGridWeather: (lat: number, lon: number, radius_km = 30, cell_size_km = 20) =>
         fetchJson<any>(`/weather/grid?lat=${lat}&lon=${lon}&radius_km=${radius_km}&cell_size_km=${cell_size_km}`),
+
+    advisories: () =>
+        fetchJson<AdvisoriesResponse>('/advisories'),
+
+    historicalEvents: () =>
+        fetchJson<HistoricalEventsResponse>('/historical'),
+
+    historicalSeries: (eventId: string, params?: { from?: string; to?: string; limit?: number }) => {
+        const qs = new URLSearchParams();
+        if (params?.from) qs.set('from', params.from);
+        if (params?.to) qs.set('to', params.to);
+        if (params?.limit) qs.set('limit', String(params.limit));
+        const q = qs.toString();
+        return fetchJson<HistoricalSeriesResponse>(`/historical/${eventId}${q ? '?' + q : ''}`);
+    },
+
+    historicalSummary: (eventId: string) =>
+        fetchJson<HistoricalSummaryResponse>(`/historical/${eventId}/summary`),
 };
