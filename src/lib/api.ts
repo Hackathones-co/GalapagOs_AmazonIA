@@ -1,4 +1,4 @@
-const BASE_URL = "https://sala-galapagos-api-629631305612.us-central1.run.app";
+const BASE_URL = "https://sala-galapagos-api-629631305612.us-central1.run.app/api/v1";
 
 // Station codes mapping
 export const STATION_CODES: Record<string, string> = {
