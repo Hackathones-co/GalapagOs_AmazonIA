@@ -5,24 +5,24 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // ── Level styles ──────────────────────────────────────────────────────────────
 const LEVEL_COLORS: Record<AdvisoryLevel, string> = {
-  safe:    '#06D6A0',
-  info:    '#118AB2',
+  safe: '#06D6A0',
+  info: '#118AB2',
   caution: '#FFD166',
-  danger:  '#EF476F',
+  danger: '#EF476F',
 };
 
 const LEVEL_BG: Record<AdvisoryLevel, string> = {
-  safe:    'rgba(6,214,160,0.08)',
-  info:    'rgba(17,138,178,0.08)',
+  safe: 'rgba(6,214,160,0.08)',
+  info: 'rgba(17,138,178,0.08)',
   caution: 'rgba(255,209,102,0.10)',
-  danger:  'rgba(239,71,111,0.10)',
+  danger: 'rgba(239,71,111,0.10)',
 };
 
 const LEVEL_LABELS: Record<AdvisoryLevel, string> = {
-  safe:    'SEGURO',
-  info:    'INFO',
+  safe: 'SEGURO',
+  info: 'INFO',
   caution: 'PRECAUCIÓN',
-  danger:  'PELIGRO',
+  danger: 'PELIGRO',
 };
 
 export interface Vertical {
@@ -128,7 +128,7 @@ export const verticals: Vertical[] = [
     userQuestion: "¿Voy a la playa o al sendero?",
     userDescription: "Es un aviso preventivo por su seguridad. A veces en la costa hace sol, pero si en la parte alta del cerro llueve fuerte, el agua puede bajar de repente por los caminos secos. El sistema le avisa cuándo es mejor no entrar a senderos o zonas bajas para evitar peligros.",
     technicalDescription: "Detecta picos de precipitación en cuencas altas incluso si la radiación neta local (NR_Wm2_Avg) es alta. El objetivo es alertar sobre inundaciones repentinas (flash floods) por conectividad hidrológica desde las estaciones de montaña hacia la costa.",
-    
+
     id: "risk",
     name: "RISKWATCH",
     label: "Riesgos",
@@ -148,7 +148,7 @@ export const verticals: Vertical[] = [
     userQuestion: "¿Qué hago hoy?",
     userDescription: "Le ayuda a organizar las actividades del día para aprovechar mejor el tiempo. Si el sistema indica que habrá mucha lluvia o neblina en las partes altas, puede elegir una actividad bajo techo o en otra zona. Así los visitantes disfrutan más de su estadía sin mojarse.",
     technicalDescription: "Utiliza la radiación solar (SlrkW_Avg) y la humedad relativa (RH_Avg) para calcular el confort térmico. Se basa en la alta probabilidad de Clase 0 (No Rain) para validar la visibilidad y viabilidad de rutas turísticas en puntos de interés.",
-    
+
     id: "turismo",
     name: "VISITGALÁPAGOS",
     label: "Turismo",
@@ -387,12 +387,12 @@ const VerticalModal = ({ vertical, advisory, onClose }: VerticalModalProps) => {
   const renderAdvisoryPanel = () => {
     if (!advisory) return <p className="font-body text-xs text-sand/50">Cargando datos...</p>;
     switch (vertical.id) {
-      case 'pesca':       return <PescaPanel d={advisory as PescaAdvisory} />;
-      case 'agro':        return <AgroPanel d={advisory as AgroAdvisory} />;
-      case 'bio':         return <BiodiversidadPanel d={advisory as BiodiversidadAdvisory} />;
-      case 'risk':        return <RiesgoPanel d={advisory as RiesgoAdvisory} />;
-      case 'turismo':     return <TurismoPanel d={advisory as TurismoAdvisory} />;
-      default:            return null;
+      case 'pesca': return <PescaPanel d={advisory as PescaAdvisory} />;
+      case 'agro': return <AgroPanel d={advisory as AgroAdvisory} />;
+      case 'bio': return <BiodiversidadPanel d={advisory as BiodiversidadAdvisory} />;
+      case 'risk': return <RiesgoPanel d={advisory as RiesgoAdvisory} />;
+      case 'turismo': return <TurismoPanel d={advisory as TurismoAdvisory} />;
+      default: return null;
     }
   };
 
@@ -410,81 +410,73 @@ const VerticalModal = ({ vertical, advisory, onClose }: VerticalModalProps) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-background border border-border rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          className="bg-background border border-border rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] overflow-y-auto"
         >
           {/* Header */}
           <div
-            className="p-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur flex items-start justify-between"
+            className="p-3 sm:p-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur flex items-center gap-3 sm:gap-4"
             style={{ backgroundColor: `${vertical.color}10` }}
           >
-            <div className="flex items-center gap-4">
-              <div
-                className="p-3 rounded-lg"
-                style={{ backgroundColor: `${vertical.color}20`, color: vertical.color }}
-              >
-                {vertical.icon}
-              </div>
-              <div>
-                <h2 className="font-display text-2xl text-foreground tracking-[0.1em]">{vertical.name}</h2>
-                <p className="font-body text-xs text-sand mt-1">{vertical.users}</p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-white/10 rounded transition-colors"
+            <div
+              className="p-2 sm:p-3 rounded-lg"
+              style={{ backgroundColor: `${vertical.color}20`, color: vertical.color }}
             >
-              <X className="w-5 h-5 text-sand" />
-            </button>
+              {vertical.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 className="font-display text-base sm:text-2xl text-foreground tracking-[0.1em] truncate">{vertical.name}</h2>
+              <p className="font-body text-[9px] sm:text-xs text-sand mt-0.5">{vertical.users}</p>
+            </div>
           </div>
 
           {/* Content */}
-          <div className="p-6 space-y-6">
+          <div className="p-3 sm:p-6 space-y-3 sm:space-y-5">
             {/* User Question & Description */}
             <div
-              className="border rounded-lg p-4"
+              className="border rounded-lg p-3 sm:p-4"
               style={{ backgroundColor: `${vertical.color}10`, borderColor: `${vertical.color}30` }}
             >
-              <h3 className="font-display text-lg text-foreground mb-2">{vertical.userQuestion}</h3>
-              <p className="font-body text-sm text-foreground/80 leading-relaxed">{vertical.userDescription}</p>
+              <h3 className="font-display text-sm sm:text-lg text-foreground mb-1 sm:mb-2">{vertical.userQuestion}</h3>
+              <p className="font-body text-[10px] sm:text-sm text-foreground/80 leading-relaxed">{vertical.userDescription}</p>
             </div>
 
             {/* Technical Details */}
-            <details className="border border-border rounded-lg p-4 group cursor-pointer">
-              <summary className="font-display text-sm text-foreground tracking-[0.05em] select-none">
+            <details className="border border-border rounded-lg p-3 sm:p-4 group cursor-pointer">
+              <summary className="font-display text-xs sm:text-sm text-foreground tracking-[0.05em] select-none">
                 📊 Detalles Técnicos
               </summary>
-              <div className="mt-3 pt-3 border-t border-border">
-                <p className="font-body text-xs text-sand/70 leading-relaxed">{vertical.technicalDescription}</p>
+              <div className="mt-2 pt-2 border-t border-border">
+                <p className="font-body text-[10px] sm:text-xs text-sand/70 leading-relaxed">{vertical.technicalDescription}</p>
               </div>
             </details>
 
             {/* Features */}
             <div>
-              <h3 className="font-display text-xs text-foreground tracking-[0.1em] mb-3">FUNCIONALIDADES</h3>
-              <div className="space-y-2">
+              <h3 className="font-display text-[10px] sm:text-xs text-foreground tracking-[0.1em] mb-2">FUNCIONALIDADES</h3>
+              <div className="space-y-1 sm:space-y-2">
                 {vertical.features.map((f, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-2 rounded hover:bg-white/5 transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 p-1 sm:p-2 rounded hover:bg-white/5 transition-colors"
                   >
                     <div
-                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0"
                       style={{ backgroundColor: vertical.color }}
                     />
-                    <span className="font-body text-xs text-foreground/80">{f}</span>
+                    <span className="font-body text-[10px] sm:text-xs text-foreground/80">{f}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Advisory data */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {advisory && (
                 <AdvisoryBanner level={advisory.level} title={advisory.title} emoji={advisory.emoji} />
               )}
-              <div className="bg-muted/20 rounded-lg p-4">
+              <div className="bg-muted/20 rounded-lg p-3 sm:p-4">
                 <h3
-                  className="font-display text-xs tracking-[0.1em] mb-4 flex items-center gap-2"
+                  className="font-display text-[10px] sm:text-xs tracking-[0.1em] mb-2 sm:mb-4 flex items-center gap-2"
                   style={{ color: vertical.color }}
                 >
                   📡 DATOS EN TIEMPO REAL
@@ -494,7 +486,7 @@ const VerticalModal = ({ vertical, advisory, onClose }: VerticalModalProps) => {
                 </h3>
                 {renderAdvisoryPanel()}
                 {advisory && (
-                  <p className="font-body text-[10px] text-foreground/60 mt-4 pt-3 border-t border-border/40">
+                  <p className="font-body text-[9px] sm:text-[10px] text-foreground/60 mt-3 pt-2 border-t border-border/40">
                     <strong className="text-foreground/80">Acción: </strong>{advisory.action}
                   </p>
                 )}
@@ -512,8 +504,8 @@ interface ServicesModalProps {
   onClose: () => void;
 }
 
-const ServiceMapComponent = ({ userLocation, filteredServices, selectedCategory, hoveredServiceId }: { 
-  userLocation: [number, number] | null, 
+const ServiceMapComponent = ({ userLocation, filteredServices, selectedCategory, hoveredServiceId }: {
+  userLocation: [number, number] | null,
   filteredServices: Service[],
   selectedCategory: string,
   hoveredServiceId?: string
@@ -593,7 +585,7 @@ const ServiceMapComponent = ({ userLocation, filteredServices, selectedCategory,
   // Centrar mapa cuando se ciclean servicios
   useEffect(() => {
     if (!mapInstanceRef.current || !hoveredServiceId) return;
-    
+
     const service = filteredServices.find((s) => s.id === hoveredServiceId);
     if (service) {
       mapInstanceRef.current.flyTo(service.coordinates, 13, {
@@ -660,19 +652,14 @@ const ServicesModal = ({ isOpen, onClose }: ServicesModalProps) => {
             className="bg-background border border-border rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
-            <div className="p-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-red-500/20 text-red-400">
-                  <MapPin className="w-8 h-8" />
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl text-foreground tracking-[0.1em]">SERVICIOS DE EMERGENCIA</h2>
-                  <p className="font-body text-xs text-sand mt-1">Salud, Abastecimiento, Farmacias y Seguridad</p>
-                </div>
+            <div className="p-3 sm:p-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur flex items-center gap-3 sm:gap-4">
+              <div className="p-2 sm:p-3 rounded-lg bg-red-500/20 text-red-400">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
-              <button onClick={onClose} className="p-1 hover:bg-white/10 rounded transition-colors">
-                <X className="w-5 h-5 text-sand" />
-              </button>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-display text-base sm:text-2xl text-foreground tracking-[0.1em] truncate">SERVICIOS DE EMERGENCIA</h2>
+                <p className="font-body text-[9px] sm:text-xs text-sand mt-0.5">Salud, Abastecimiento, Farmacias y Seguridad</p>
+              </div>
             </div>
 
             {/* Content */}
@@ -706,11 +693,10 @@ const ServicesModal = ({ isOpen, onClose }: ServicesModalProps) => {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-lg font-body text-xs transition-all ${
-                      selectedCategory === cat
-                        ? "text-foreground"
-                        : "text-sand/60 hover:text-sand"
-                    }`}
+                    className={`px-4 py-2 rounded-lg font-body text-xs transition-all ${selectedCategory === cat
+                      ? "text-foreground"
+                      : "text-sand/60 hover:text-sand"
+                      }`}
                     style={{
                       backgroundColor: selectedCategory === cat ? `${getServiceColor(cat)}30` : "transparent",
                       borderBottom: selectedCategory === cat ? `2px solid ${getServiceColor(cat)}` : "none",
@@ -724,8 +710,8 @@ const ServicesModal = ({ isOpen, onClose }: ServicesModalProps) => {
               {/* Map Section */}
               {userLocation && (
                 <div className="border border-border rounded-lg overflow-hidden bg-muted/20">
-                  <ServiceMapComponent 
-                    userLocation={userLocation} 
+                  <ServiceMapComponent
+                    userLocation={userLocation}
                     filteredServices={filteredServices}
                     selectedCategory={selectedCategory}
                     hoveredServiceId={hoveredServiceId}
@@ -751,8 +737,8 @@ const ServicesModal = ({ isOpen, onClose }: ServicesModalProps) => {
                       onMouseLeave={() => setHoveredServiceId(undefined)}
                       className="p-3 rounded-lg border transition-all hover:shadow-lg cursor-pointer"
                       style={{
-                        backgroundColor: hoveredServiceId === service.id 
-                          ? `${getServiceColor(selectedCategory)}25` 
+                        backgroundColor: hoveredServiceId === service.id
+                          ? `${getServiceColor(selectedCategory)}25`
                           : `${getServiceColor(selectedCategory)}15`,
                         borderColor: hoveredServiceId === service.id
                           ? `${getServiceColor(selectedCategory)}70`
@@ -794,10 +780,10 @@ interface VerticalsGridProps {
 
 // Map vertical.id → advisories key
 const ADVISORY_KEY: Record<string, keyof AdvisoriesResponse['advisories']> = {
-  pesca:   'pesca',
-  agro:    'agro',
-  bio:     'biodiversidad',
-  risk:    'riesgo',
+  pesca: 'pesca',
+  agro: 'agro',
+  bio: 'biodiversidad',
+  risk: 'riesgo',
   turismo: 'turismo',
 };
 
@@ -807,7 +793,7 @@ const VerticalsGrid = ({ onStationClick }: VerticalsGridProps) => {
   const [advisoriesData, setAdvisoriesData] = useState<AdvisoriesResponse | null>(null);
 
   useEffect(() => {
-    const load = () => api.advisories().then(setAdvisoriesData).catch(() => {});
+    const load = () => api.advisories().then(setAdvisoriesData).catch(() => { });
     load();
     const id = setInterval(load, 5 * 60 * 1000);
     return () => clearInterval(id);
